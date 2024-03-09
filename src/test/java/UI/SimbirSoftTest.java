@@ -1,15 +1,21 @@
 package UI;
 
+import io.qameta.allure.Owner;
 import UI.PageObject.openXYZBank;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.DisplayName;
+
+import java.io.IOException;
+
+import static UI.PageObject.openXYZBank.fibonacciNumber;
 
 public class SimbirSoftTest extends Abstract {
     openXYZBank openXYZBank;
 
+    @Owner(value = "Ruslan Bikineev")
+    @DisplayName("Проверка пополнение и списания счета")
     @Test
-    public void Test1()  throws InterruptedException {
+    public void Test1() throws InterruptedException, IOException {
         openXYZBank = new openXYZBank(driver);
         driver.get(openXYZBank.XYZBank);
         openXYZBank.ClickElement(openXYZBank.CustomerLoginButton);
@@ -21,26 +27,11 @@ public class SimbirSoftTest extends Abstract {
         openXYZBank.ClickElement(openXYZBank.WithdrawlButton);
         openXYZBank.SendToElement(openXYZBank.AmountToWithdrawn,String.valueOf(fibonacciNumber));
         openXYZBank.ClickElement(openXYZBank.ToBeWithdrawlButton);
-        assertEquals(Integer.valueOf(openXYZBank.GetTextInElement(openXYZBank.Balance)), 0);
-        Thread.sleep(3000);
+//        Thread.sleep(10000);
+        checkEqualString(openXYZBank.GetTextInElement(openXYZBank.Balance), "0");
         openXYZBank.ClickElement(openXYZBank.TransactionsButton);
-        assertEquals(openXYZBank.GetTextInElement(openXYZBank.Anchor0TransactionType), "Credit");
-        assertEquals(openXYZBank.GetTextInElement(openXYZBank.Anchor1TransactionType), "Debit");
-        CreateCSVFile(openXYZBank.GetTextInElement(openXYZBank.Anchor0Date),
-                openXYZBank.GetTextInElement(openXYZBank.Anchor0Amount),
-                openXYZBank.GetTextInElement(openXYZBank.Anchor0TransactionType),
-                openXYZBank.GetTextInElement(openXYZBank.Anchor1Date),
-                openXYZBank.GetTextInElement(openXYZBank.Anchor1Amount),
-                openXYZBank.GetTextInElement(openXYZBank.Anchor1TransactionType));
-
-    }
-
-    public static void Sum(int a, int b, int sum) {
-        Assertions.assertEquals(a+b, sum);
-    }
-
-    @Test
-    public void FiledTest() {
-        Sum(1, 2, 3);
+        checkEqualString(openXYZBank.GetTextInElement(openXYZBank.Anchor0TransactionType), "Credit");
+        checkEqualString(openXYZBank.GetTextInElement(openXYZBank.Anchor1TransactionType), "Debit");
+        openXYZBank.CreateCSVFile();
     }
 }
