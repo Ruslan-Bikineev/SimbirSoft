@@ -1,24 +1,28 @@
 package UI.PageObject;
 import UI.Abstract;
-import io.qameta.allure.Attachment;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
-
 import java.io.FileWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.util.Date;
+import java.util.Locale;
+
+import org.openqa.selenium.By;
+import io.qameta.allure.Attachment;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.PageFactory;
+
 
 public class openXYZBank extends Abstract {
-    public openXYZBank(WebDriver driver) {
-        Abstract.driver = (ChromeDriver) driver;
+    public openXYZBank(RemoteWebDriver driver) {
+        Abstract.driver = (RemoteWebDriver) driver;
         PageFactory.initElements(driver, this);
     }
 
-    public String XYZBank = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
+    public static String XYZBank = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
 
     public By CustomerLoginButton = By.cssSelector("[ng-click='customer()']");
     public By SelectHarryPotterButton = By.cssSelector("option[value='2']");
@@ -43,12 +47,24 @@ public class openXYZBank extends Abstract {
     public static byte[] getBytes() throws IOException {
         return Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/src/test/resources/report.csv"));
     }
+
+    public static String convertingDate(String date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a", Locale.ENGLISH);
+        try {
+            Date dateFormat = formatter.parse(date);
+            SimpleDateFormat newFormatter = new SimpleDateFormat("dd MMM yyyy hh:mm:ss a", Locale.ENGLISH);
+            date = newFormatter.format(dateFormat);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
     public void CreateCSVFile() throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(GetTextInElement(Anchor0Date)).append(";");
+        stringBuilder.append(convertingDate(GetTextInElement(Anchor0Date))).append(";");
         stringBuilder.append(GetTextInElement(Anchor0Amount)).append(";");
         stringBuilder.append(GetTextInElement(Anchor0TransactionType)).append("\n");
-        stringBuilder.append(GetTextInElement(Anchor1Date)).append(";");
+        stringBuilder.append(convertingDate(GetTextInElement(Anchor1Date))).append(";");
         stringBuilder.append(GetTextInElement(Anchor1Amount)).append(";");
         stringBuilder.append(GetTextInElement(Anchor1TransactionType)).append("\n");
         try (FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/src/test/resources/report.csv")) {

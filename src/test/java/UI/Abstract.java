@@ -1,36 +1,37 @@
 package UI;
 
-import dev.failsafe.internal.util.Assert;
+import java.net.URL;
+import java.time.Duration;
 import io.qameta.allure.Step;
+import org.openqa.selenium.By;
+import java.net.MalformedURLException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.By;
-import org.openqa.selenium.chrome.ChromeDriver;
+import dev.failsafe.internal.util.Assert;
 import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.io.IOException;
-import java.time.Duration;
-
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 abstract public class Abstract {
 
-    public static WebDriverWait wait;
-    public static ChromeDriver driver;
-    public static ChromeOptions chromeOptions;
+    protected static WebDriverWait wait;
+    protected static RemoteWebDriver driver;
+    protected static ChromeOptions chromeOptions;
 
-    public static void setUp() {
+    public static void setUp() throws MalformedURLException {
         WebDriverManager.chromedriver().setup();
         chromeOptions = new ChromeOptions();
-        driver = new ChromeDriver(chromeOptions);
+        driver = new RemoteWebDriver(new URL("http://localhost:4444"), chromeOptions);
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @BeforeEach
-    public void init() {
+    public void init() throws MalformedURLException {
         setUp();
     }
 
@@ -59,8 +60,8 @@ abstract public class Abstract {
         return driver.findElement(locator).getText();
     }
 
-    @Step("Проверка эквивалентности строки {string1} строке {string2}")
-    public static void checkEqualString(String string1, String string2) throws IOException{
+    @Step("Проверка эквивалентности строки {string1} к строке {string2}")
+    public static void checkEqualString(String string1, String string2) {
         Assert.isTrue(string1.equals(string2), "Строки не эквивалентны");
         assertEquals(string1, string2);
     }
