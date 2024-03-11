@@ -15,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 
+import static ui.TestsProperties.GRID_URL;
+
 abstract public class BaseTest {
 
     protected static WebDriverWait wait;
@@ -24,8 +26,9 @@ abstract public class BaseTest {
     public static void setUp() throws MalformedURLException {
         WebDriverManager.chromedriver().setup();
         chromeOptions = new ChromeOptions();
-        driver = new RemoteWebDriver(new URL("http://localhost:4444"), chromeOptions);
+        driver = new RemoteWebDriver(new URL(GRID_URL), chromeOptions);
         driver.manage().window().maximize();
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(5));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
@@ -49,8 +52,13 @@ abstract public class BaseTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
+    public void waitForClickabelElement(By locator) {
+        wait.until(ExpectedConditions.elementToBeClickable(locator));
+    }
+
     public void clickElement(By locator) {
         waitForElement(locator);
+        waitForClickabelElement(locator);
         driver.findElement(locator).click();
     }
 

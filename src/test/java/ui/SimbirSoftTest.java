@@ -8,6 +8,8 @@ import ui.pageobject.OpenXyzBank;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import static ui.TestsProperties.XYZ_BANK_URL;
+
 public class SimbirSoftTest extends BaseTest {
     Fibonacci fibonacci;
     OpenXyzBank openXyzBank;
@@ -20,18 +22,19 @@ public class SimbirSoftTest extends BaseTest {
         allureMethods = new AllureMethods();
         openXyzBank = new OpenXyzBank(driver);
         fibonacci = new Fibonacci(LocalDate.now().getDayOfMonth() + 1);
-        driver.get(OpenXyzBank.XYZ_BANK_URL);
+        driver.get(XYZ_BANK_URL);
         openXyzBank.clickElement(openXyzBank.customerLoginButton);
         openXyzBank.clickElement(openXyzBank.selectHarryPotterButton);
         openXyzBank.clickElement(openXyzBank.loginButton);
         openXyzBank.clickElement(openXyzBank.depositButton);
         openXyzBank.sendToElement(openXyzBank.amountToDeposited, String.valueOf(fibonacci.getFibonacci()));
         openXyzBank.clickElement(openXyzBank.toBeDepositButton);
+        checkEqualString(openXyzBank.getTextInElement(openXyzBank.message), "Deposit Successful");
+        checkEqualString(openXyzBank.getTextInElement(openXyzBank.balance), String.valueOf(fibonacci.getFibonacci()));
         openXyzBank.clickElement(openXyzBank.withdrawlButton);
         openXyzBank.sendToElement(openXyzBank.amountToWithdrawn, String.valueOf(fibonacci.getFibonacci()));
-        Thread.sleep(1000);
         openXyzBank.clickElement(openXyzBank.toBeWithdrawlButton);
-        Thread.sleep(1000);
+        checkEqualString(openXyzBank.getTextInElement(openXyzBank.message), "Transaction successful");
         checkEqualString(openXyzBank.getTextInElement(openXyzBank.balance), "0");
         openXyzBank.clickElement(openXyzBank.transactionsButton);
         checkEqualString(openXyzBank.getTextInElement(openXyzBank.anchor0Amount), String.valueOf(fibonacci.getFibonacci()));

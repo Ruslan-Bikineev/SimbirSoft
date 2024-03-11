@@ -6,7 +6,6 @@ import org.openqa.selenium.support.PageFactory;
 import ui.BaseTest;
 
 public class OpenXyzBank extends BaseTest {
-    public static final String XYZ_BANK_URL = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
     public By customerLoginButton = By.cssSelector("[ng-click='customer()']");
     public By selectHarryPotterButton = By.cssSelector("option[value='2']");
     public By loginButton = By.cssSelector("button.btn-default");
@@ -24,6 +23,8 @@ public class OpenXyzBank extends BaseTest {
     public By anchor1Date = By.xpath("//tr[@id='anchor1']//td[@class='ng-binding'][1]");
     public By anchor1Amount = By.xpath("//tr[@id='anchor1']//td[@class='ng-binding'][2]");
     public By anchor1TransactionType = By.xpath("//tr[@id='anchor1']//td[@class='ng-binding'][3]");
+    public By message = By.xpath("//span[@ng-show='message']");
+
     public OpenXyzBank(RemoteWebDriver driver) {
         BaseTest.driver = driver;
         PageFactory.initElements(driver, this);
