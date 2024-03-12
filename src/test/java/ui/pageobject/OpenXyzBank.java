@@ -3,9 +3,8 @@ package ui.pageobject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.PageFactory;
-import ui.BaseTest;
 
-public class OpenXyzBank extends BaseTest {
+public class OpenXyzBank extends BasePage {
     public By customerLoginButton = By.cssSelector("[ng-click='customer()']");
     public By selectHarryPotterButton = By.cssSelector("option[value='2']");
     public By loginButton = By.cssSelector("button.btn-default");
@@ -26,7 +25,7 @@ public class OpenXyzBank extends BaseTest {
     public By message = By.xpath("//span[@ng-show='message']");
 
     public OpenXyzBank(RemoteWebDriver driver) {
-        BaseTest.driver = driver;
+        super(driver);
         PageFactory.initElements(driver, this);
     }
 

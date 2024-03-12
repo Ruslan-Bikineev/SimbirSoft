@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static ui.TestsProperties.XYZ_BANK_URL;
+import static ui.pageobject.BasePage.checkEqualString;
 
 public class SimbirSoftTest extends BaseTest {
     Fibonacci fibonacci;
@@ -18,10 +19,10 @@ public class SimbirSoftTest extends BaseTest {
     @Owner(value = "Ruslan Bikineev")
     @DisplayName("Check deposit and withdrawal by user 'Harry Potter'")
     @Test
-    public void testDepositAndWithdrawal() throws InterruptedException, IOException {
+    public void testDepositAndWithdrawal() throws IOException {
         allureMethods = new AllureMethods();
-        openXyzBank = new OpenXyzBank(driver);
         fibonacci = new Fibonacci(LocalDate.now().getDayOfMonth() + 1);
+        openXyzBank = new OpenXyzBank(driver);
         driver.get(XYZ_BANK_URL);
         openXyzBank.clickElement(openXyzBank.customerLoginButton);
         openXyzBank.clickElement(openXyzBank.selectHarryPotterButton);
