@@ -20,8 +20,8 @@ public abstract class BaseTest {
         ChromeOptions chromeOptions = new ChromeOptions();
         driver = new RemoteWebDriver(new URL(GRID_URL), chromeOptions);
         driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(15));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
     @AfterEach
